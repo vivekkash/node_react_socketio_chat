@@ -3,17 +3,18 @@ import Chatbox from './Chatbox';
 import User from './User';
 
 const Section = () => {
-  const [page, setPage] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const user = localStorage.getItem('user')
       ? JSON.parse(localStorage.getItem('user'))
       : null;
-    setPage(user);
+    setUser(user);
   }, []);
+
   return (
     <div className="relative mt-20">
-      {page == 'Chat' ? <Chatbox /> : <User setPage={setPage} />}
+      {user ? <Chatbox user={user} /> : <User setUser={setUser} />}
     </div>
   );
 };

@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
 import Store from '../../Store';
 
-const User = ({ setPage }) => {
+const User = ({ setUser }) => {
   const [room, setRoom] = useState('General');
   const [roomList, setRoomList] = useState([]);
   const [username, setUsername] = useState([]);
@@ -15,11 +15,9 @@ const User = ({ setPage }) => {
   }, [socket]);
 
   const chatSettingHandler = () => {
-    localStorage.setItem(
-      'user',
-      JSON.stringify({ username: username, room: room })
-    );
-    setPage('Chat');
+    const user = { username: username, room: room };
+    localStorage.setItem('user', JSON.stringify(user));
+    setUser(user);
   };
 
   return (

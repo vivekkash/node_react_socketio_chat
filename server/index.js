@@ -24,30 +24,44 @@ const getActiveUsers = async () => {
 };
 
 const emitNewActiveUsers = async () => {
-  console.log(await getActiveUsers());
   io.emit('all_active_users', await getActiveUsers());
 };
 
 io.on('connection', (socket) => {
-  console.log('user connected ', socket.id);
   socket.on('ping-active-users', () => emitNewActiveUsers());
   socket.on('fetch-rooms', () => io.to(socket.id).emit('room-list', rooms));
 
+  // chat room joining steps
   socket.on('join_room', ({ room, name }) => {
     socket.join(room);
-    socket.to(room).emit('join_message', { message: `${name} joined` });
-    io.in(room)
-      .to(socket.id)
-      .emit('welcome_user', { message: `welcome ${name} to Gups` });
+    socket.to(room).emit('join_message', { message: `${name} has joined` });
+    io.to(socket.id).emit('welcome_user', {
+      message: `welcome ${name} to Gups`,
+    });
   });
 
+  // chatroom typing events
   socket.on('typing', ({ room, name }) => {
+    console.log(room, name, 'typing');
     socket.to(room).emit('typing_message', { message: `${name} is typing` });
   });
 
-  socket.on('disconnect', () => {
-    console.log('user disconnected ', socket.id);
+  socket.on('stop_typing', ({ room }) => {
+    socket.to(room).emit('typing_message', { message: `` });
+  });
 
+  //chatroom discussion or messagin
+  socket.on('in_message', ({ room, name, message }) => {
+    io.to(room).emit('out_message', { name, message });
+  });
+
+  //chatroom left
+  socket.on('left', ({ room, name }) => {
+    socket.leave(room);
+    socket.to(room).emit('left_room', { message: `${name} left` });
+  });
+
+  socket.on('disconnect', () => {
     //LiveUsers
     emitNewActiveUsers();
   });

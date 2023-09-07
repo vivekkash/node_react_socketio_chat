@@ -5,6 +5,7 @@ export const Store = createContext();
 
 export const StoreProvider = (props) => {
   const socket = io('http://localhost:5000');
+  console.log(socket);
 
   useEffect(() => {
     const getUsersData = async () => {
