@@ -1,34 +1,34 @@
-import { Navbar } from 'flowbite-react';
 import { FaRegMessage } from 'react-icons/fa6';
 import { Link } from 'react-router-dom';
 
 const Navigation = () => {
   return (
-    <Navbar fluid className="h-full py-2">
-      <Navbar.Brand className="text-md md:text-xl font-semibold">
-        <FaRegMessage className="font-bold text-2xl text-gray-400 mx-2" /> Gups
-      </Navbar.Brand>
-      <Navbar.Toggle />
-      <Navbar.Collapse className="bg-white z-10 text-sm py-1 w-2/3">
+    <nav className="h-16 bg-white w-full fixed top-0 flex justify-between items-center px-4">
+      <div className="text-xl font-semibold">
         <Link to="/">
-          <p className="p-2 border-[1px] border-dotted border-b-gray-400 md:border-none">
-            Home
-          </p>
+          <span className="inline-block">
+            <FaRegMessage />
+          </span>{' '}
+          <span>Gups </span>
         </Link>
-
-        <Link to="/chat">
-          <p className="p-2 border-[1px] border-dotted border-b-gray-400 md:border-none">
-            Chat
-          </p>
-        </Link>
-
-        <Link to="/live">
-          <p className="p-2 border-[1px] border-dotted border-b-gray-400 md:border-none">
-            Live Users
-          </p>
-        </Link>
-      </Navbar.Collapse>
-    </Navbar>
+      </div>
+      <div className="text-md font-light">
+        <ul className="flex gap-4">
+          <Link to="/">
+            <li>Home</li>
+          </Link>
+          <Link to="/join">
+            <li>Chat</li>
+          </Link>
+          <Link to="/live">
+            <li>Live</li>
+          </Link>
+          <Link to="/video">
+            <li>Video</li>
+          </Link>
+        </ul>
+      </div>
+    </nav>
   );
 };
 

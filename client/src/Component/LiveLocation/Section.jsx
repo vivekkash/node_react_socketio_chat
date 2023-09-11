@@ -3,12 +3,13 @@ import Store from '../../Store';
 import { useContext, useEffect, useState } from 'react';
 
 const Section = () => {
-  const socket = useContext(Store);
+  const { socket } = useContext(Store);
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
     socket.emit('ping-active-users', {});
     socket.on('all_active_users', (active_users) => {
+      console.log(active_users);
       setUsers(active_users);
     });
   }, [socket]);
