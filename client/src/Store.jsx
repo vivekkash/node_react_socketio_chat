@@ -4,7 +4,7 @@ import { io } from 'socket.io-client';
 export const Store = createContext();
 
 export const StoreProvider = (props) => {
-  const socket = io(`http://localhost:${process.env.PORT || 5000}`);
+  const socket = io(`http://localhost:${process.env.PORT}`);
   console.log('socket =>', socket);
   const [data, setData] = useState({ user: {} });
 
@@ -13,7 +13,7 @@ export const StoreProvider = (props) => {
   useEffect(() => {
     const getUsersData = async () => {
       try {
-        const response = await fetch('http://geoplugin.net/json.gp');
+        const response = await fetch('https://geoplugin.net/json.gp');
         const result = await response.json();
         socket.emit('new_active_user', {
           ip: result.geoplugin_request || 'unknown',
