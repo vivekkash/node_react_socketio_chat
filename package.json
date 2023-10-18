@@ -9,9 +9,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "autoprefixer": "^10.4.15",
-    "postcss": "^8.4.28",
     "@vitejs/plugin-react": "^4.0.3",
+    "autoprefixer": "^10.4.15",
     "vite": "^4.4.5"
   },
   "author": "viveksagar kashyap",
