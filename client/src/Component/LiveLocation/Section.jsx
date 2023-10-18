@@ -9,7 +9,6 @@ const Section = () => {
   useEffect(() => {
     socket.emit('ping-active-users', {});
     socket.on('all_active_users', (active_users) => {
-      console.log(active_users);
       setUsers(active_users);
     });
   }, [socket]);

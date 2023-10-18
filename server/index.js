@@ -2,6 +2,7 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import path from 'path';
 
 const app = express();
 
@@ -11,10 +12,17 @@ const httpServer = createServer(app);
 
 const io = new Server(httpServer, {
   cors: {
-    origin: ['http://localhost:5173', 'http://192.168.1.18:5173'],
+    origin: ['*'],
     methods: ['GET', 'POST'],
   },
 });
+
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, 'client/dist')));
+
+app.use('*', (req, res, next) =>
+  res.sendFile(path.join(__dirname, 'client/dist/index.html'))
+);
 
 app.get('/check', (req, res) => {
   res.send('Server is healthy');
@@ -38,9 +46,8 @@ const getRoomUsers = (room) => {
 };
 
 io.on('connection', (socket) => {
-  console.log('connection', socket.id);
   //get socket id
-  socket.broadcast.emit('videoid', socket.id);
+  socket.emit('me', { id: socket.id });
 
   // Live Concurrent Users
   socket.on('ping-active-users', () => emitNewActiveUsers());
@@ -58,8 +65,6 @@ io.on('connection', (socket) => {
     //users per room
     // all users
     userObj = room && name ? [...userObj, { id: socket.id, name, room }] : [];
-
-    console.log(userObj);
 
     socket.join(room);
     socket.to(room).emit('join_message', {
@@ -92,7 +97,6 @@ io.on('connection', (socket) => {
 
   //chatroom discussion or messagin
   socket.on('out_message', ({ room, name, message }) => {
-    console.log(message);
     io.to(room).emit('in_message', { name, message, id: socket.id });
   });
 
@@ -118,11 +122,10 @@ io.on('connection', (socket) => {
 
   socket.on('disconnect', () => {
     //end video call
-    socket.emit('video:endCall');
+    socket.broadcast.emit('callEnded');
 
     //remove user from userlist
     let userIndex = userObj.findIndex((u) => u.id === socket.id);
-    console.log(userObj, userIndex, socket.id);
     let room, name;
     if (userIndex >= 0) {
       room = userObj[userIndex].room;
@@ -149,14 +152,17 @@ io.on('connection', (socket) => {
 
   //video call
 
-  socket.on('video:incoming_call', ({ from, to, signal }) => {
-    console.log({ from, to, signal });
-    io.to(to).emit('video:incoming_call', { from, signal });
+  socket.on('callUser', (data) => {
+    io.to(data.userToCall).emit('callUser', {
+      signal: data.signalData,
+      from: data.from,
+      name: data.name,
+    });
   });
 
-  socket.on('video:answer_call', ({ signal, to }) =>
-    io.to(to).emit('video:call_accepted', { signal })
-  );
+  socket.on('answerCall', (data) => {
+    io.to(data.to).emit('callAccepted', data.signal);
+  });
 });
 
 httpServer.listen(5000, () => console.log('Server has started listening'));

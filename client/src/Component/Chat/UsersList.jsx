@@ -14,8 +14,6 @@ const UsersList = ({ room }) => {
     };
   }, [room]);
 
-  console.log(users);
-
   return (
     <div className="flex flex-col">
       <div className="h-20"></div>

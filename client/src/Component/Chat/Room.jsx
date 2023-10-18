@@ -18,7 +18,7 @@ const Chatbox = () => {
 
   useEffect(() => {
     if (!(user.username && user.room)) {
-      navigate('/join');
+      navigate('/');
     }
   }, [user, navigate]);
 
@@ -143,7 +143,7 @@ const Chatbox = () => {
     e.preventDefault();
     localStorage.removeItem('user');
     socket.emit('left', { room: user.room, name: user.username });
-    navigate('/join');
+    navigate('/');
   };
 
   const autoScrollMessage = () => {

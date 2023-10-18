@@ -17,15 +17,15 @@ const Navigation = () => {
           <Link to="/">
             <li>Home</li>
           </Link>
-          <Link to="/join">
+          {/* <Link to="/join">
             <li>Chat</li>
-          </Link>
+          </Link> */}
           <Link to="/live">
             <li>Live</li>
           </Link>
-          <Link to="/video">
+          {/* <Link to="/video">
             <li>Video</li>
-          </Link>
+          </Link> */}
         </ul>
       </div>
     </nav>
