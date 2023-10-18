@@ -165,4 +165,8 @@ io.on('connection', (socket) => {
   });
 });
 
-httpServer.listen(5000, () => console.log('Server has started listening'));
+const PORT = process.env.PORT || 5000;
+
+httpServer.listen(PORT, () =>
+  console.log(`Server has started listening on ${PORT}`)
+);
