@@ -23,4 +23,7 @@ export default defineConfig({
       protocolImports: true,
     }),
   ],
+  build: {
+    chunkSizeWarningLimit: 1600,
+  },
 });
