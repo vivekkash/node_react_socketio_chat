@@ -12,7 +12,7 @@ export const StoreProvider = (props) => {
   useEffect(() => {
     const getUsersData = async () => {
       try {
-        const response = await fetch('https://geoplugin.net/json.gp');
+        const response = await fetch('http://geoplugin.net/json.gp');
         const result = await response.json();
         socket.emit('new_active_user', {
           ip: result.geoplugin_request || 'unknown',
