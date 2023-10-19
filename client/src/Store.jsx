@@ -4,8 +4,7 @@ import { io } from 'socket.io-client';
 export const Store = createContext();
 
 export const StoreProvider = (props) => {
-  const socket = io(`http://localhost:5000`);
-  console.log('socket =>', socket);
+  const socket = io();
   const [data, setData] = useState({ user: {} });
 
   //video call states
